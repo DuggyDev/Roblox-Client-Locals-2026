@@ -1,8 +1,6 @@
 RODEVS FILE (INTRO FILE)
 
 
--- BLA BLA BLA STYLE COMMENTS
--- FULL SCRIPT - COMMENTS ONLY TRANSLATED
 
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
