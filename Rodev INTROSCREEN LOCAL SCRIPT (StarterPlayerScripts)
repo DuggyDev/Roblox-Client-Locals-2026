@@ -1,0 +1,294 @@
+RODEVS FILE (INTRO FILE)
+
+
+-- BLA BLA BLA STYLE COMMENTS
+-- FULL SCRIPT - COMMENTS ONLY TRANSLATED
+
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
+-------------------------------------------------
+-- DISABLE ALL UI AT START
+-------------------------------------------------
+
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- WAIT UNTIL ALL UI IS LOADED
+task.wait(0.5)
+
+-- DISABLE ALL UI EXCEPT LOADING SCREEN
+for _, ui in pairs(playerGui:GetChildren()) do
+	if ui:IsA("ScreenGui") and ui.Name ~= "LoadingScreen" then
+		ui.Enabled = false
+	end
+end
+
+-------------------------------------------------
+-- CREATE SCREEN GUI
+-------------------------------------------------
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "LoadingScreen"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = playerGui
+
+-------------------------------------------------
+-- CREATE MAIN FRAME
+-------------------------------------------------
+
+local frame = Instance.new("Frame")
+frame.Name = "mainMenu"
+frame.Size = UDim2.fromScale(0.4, 0.8)
+frame.Position = UDim2.fromScale(0.05, 0.1)
+frame.AnchorPoint = Vector2.new(0, 0)
+frame.BackgroundTransparency = 1
+frame.BorderSizePixel = 0
+frame.Parent = gui
+
+-------------------------------------------------
+-- CREATE TITLE LABEL
+-------------------------------------------------
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.fromScale(0.8, 0.15)
+titleLabel.Position = UDim2.fromScale(0.1, 0.1)
+titleLabel.Text = "Welcome to: The Abyssal"
+titleLabel.TextScaled = true
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.BackgroundTransparency = 1
+titleLabel.FontFace = Font.new("rbxasset://fonts/families/PressStart2P.json")
+titleLabel.TextTransparency = 1
+titleLabel.Parent = frame
+
+-------------------------------------------------
+-- CREATE SCROLLING FRAMES
+-------------------------------------------------
+
+-- UPDATE LOG SCROLLING FRAME
+local updateScrollFrame = Instance.new("ScrollingFrame")
+updateScrollFrame.Name = "UpdateScrollFrame"
+updateScrollFrame.Size = UDim2.fromScale(0.8, 0.65)
+updateScrollFrame.Position = UDim2.fromScale(0.1, 0.2)
+updateScrollFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+updateScrollFrame.BackgroundTransparency = 0.3
+updateScrollFrame.BorderSizePixel = 3
+updateScrollFrame.BorderColor3 = Color3.fromRGB(255, 255, 255)
+updateScrollFrame.ScrollBarThickness = 15
+updateScrollFrame.CanvasSize = UDim2.fromScale(0, 2)
+updateScrollFrame.Parent = frame
+updateScrollFrame.Visible = false
+
+local updateTextLabel = Instance.new("TextLabel")
+updateTextLabel.Name = "UpdateText"
+updateTextLabel.Size = UDim2.fromScale(0.95, 1)
+updateTextLabel.Position = UDim2.fromScale(0.025, 0)
+updateTextLabel.Text = "Not Yet!"
+updateTextLabel.TextSize = 32
+updateTextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+updateTextLabel.BackgroundTransparency = 1
+updateTextLabel.FontFace = Font.new("rbxasset://fonts/families/PressStart2P.json")
+updateTextLabel.TextWrapped = true
+updateTextLabel.TextXAlignment = Enum.TextXAlignment.Left
+updateTextLabel.TextYAlignment = Enum.TextYAlignment.Top
+updateTextLabel.Parent = updateScrollFrame
+
+-- BADGES SCROLLING FRAME
+local badgesScrollFrame = Instance.new("ScrollingFrame")
+badgesScrollFrame.Name = "BadgesScrollFrame"
+badgesScrollFrame.Size = UDim2.fromScale(0.8, 0.65)
+badgesScrollFrame.Position = UDim2.fromScale(0.1, 0.2)
+badgesScrollFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+badgesScrollFrame.BackgroundTransparency = 0.3
+badgesScrollFrame.BorderSizePixel = 3
+badgesScrollFrame.BorderColor3 = Color3.fromRGB(255, 255, 255)
+badgesScrollFrame.ScrollBarThickness = 15
+badgesScrollFrame.CanvasSize = UDim2.fromScale(0, 2)
+badgesScrollFrame.Parent = frame
+badgesScrollFrame.Visible = false
+
+local badgesTextLabel = Instance.new("TextLabel")
+badgesTextLabel.Name = "BadgesText"
+badgesTextLabel.Size = UDim2.fromScale(0.95, 1)
+badgesTextLabel.Position = UDim2.fromScale(0.025, 0)
+badgesTextLabel.Text = "Not Yet!"
+badgesTextLabel.TextSize = 32
+badgesTextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+badgesTextLabel.BackgroundTransparency = 1
+badgesTextLabel.FontFace = Font.new("rbxasset://fonts/families/PressStart2P.json")
+badgesTextLabel.TextWrapped = true
+badgesTextLabel.TextXAlignment = Enum.TextXAlignment.Left
+badgesTextLabel.TextYAlignment = Enum.TextYAlignment.Top
+badgesTextLabel.Parent = badgesScrollFrame
+
+-------------------------------------------------
+-- CREDITS LABEL (NO SCROLL FRAME)
+-------------------------------------------------
+
+local creditsLabel = Instance.new("TextLabel")
+creditsLabel.Name = "CreditsLabel"
+creditsLabel.Size = UDim2.fromScale(0.8, 0.65)
+creditsLabel.Position = UDim2.fromScale(0.1, 0.2)
+creditsLabel.Text = "NO CREDITS!"
+creditsLabel.TextScaled = true
+creditsLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+creditsLabel.BackgroundTransparency = 1
+creditsLabel.FontFace = Font.new("rbxasset://fonts/families/PressStart2P.json")
+creditsLabel.TextWrapped = true
+creditsLabel.Parent = frame
+creditsLabel.Visible = false
+
+-------------------------------------------------
+-- CREATE BUTTON FUNCTION
+-------------------------------------------------
+
+local function createButton(name, text, positionY)
+	local btn = Instance.new("TextButton")
+	btn.Name = name
+	btn.Size = UDim2.fromScale(0.8, 0.08)
+	btn.Position = UDim2.fromScale(0.1, positionY)
+	btn.Text = text
+	btn.TextScaled = true
+	btn.BackgroundColor3 = Color3.fromRGB(25,25,25)
+	btn.TextColor3 = Color3.fromRGB(255,255,255)
+	btn.BorderSizePixel = 0
+	btn.FontFace = Font.new("rbxasset://fonts/families/PressStart2P.json")
+	btn.Parent = frame
+	btn.Visible = false
+	btn.TextTransparency = 1
+
+	-- BUTTON HOVER EFFECT
+	btn.MouseEnter:Connect(function()
+		TweenService:Create(btn, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(45,45,45)
+		}):Play()
+	end)
+
+	btn.MouseLeave:Connect(function()
+		TweenService:Create(btn, TweenInfo.new(0.2), {
+			BackgroundColor3 = Color3.fromRGB(25,25,25)
+		}):Play()
+	end)
+
+	return btn
+end
+
+-------------------------------------------------
+-- CREATE ALL BUTTONS
+-------------------------------------------------
+
+local lobbyButton = createButton("LobbyButton","Go to Lobby",0.38)
+local updateButton = createButton("UpdateButton","Update Log",0.48)
+local creditsButton = createButton("CreditsButton","Credits",0.58)
+local badgesButton = createButton("BadgesButton","Badges",0.68)
+
+-------------------------------------------------
+-- CLOSE BUTTON (IMAGE BUTTON)
+-------------------------------------------------
+
+local closeButton = Instance.new("ImageButton")
+closeButton.Name = "CloseButton"
+closeButton.Size = UDim2.fromScale(0.08, 0.08)
+closeButton.Position = UDim2.fromScale(0.88, 0.05)
+closeButton.Image = "rbxassetid://79236591653756"
+closeButton.BackgroundTransparency = 1
+closeButton.ImageTransparency = 1
+closeButton.Parent = frame
+closeButton.Visible = false
+
+-------------------------------------------------
+-- BLACK SCREEN FOR INTRO
+-------------------------------------------------
+
+local blackFrame = Instance.new("Frame")
+blackFrame.Name = "BlackScreen"
+blackFrame.Size = UDim2.new(1,0,1.5,0)
+blackFrame.Position = UDim2.new(0,0,-0.25,0)
+blackFrame.BackgroundColor3 = Color3.new(0,0,0)
+blackFrame.BorderSizePixel = 0
+blackFrame.Parent = gui
+
+-------------------------------------------------
+-- CAMERA SETUP
+-------------------------------------------------
+
+local intro = workspace:WaitForChild("Intro", 10)
+if not intro then
+	warn("INTRO FOLDER NOT FOUND")
+	return
+end
+
+local menuCams = intro:WaitForChild("MenuCams", 5)
+local camStart = intro:WaitForChild("camStart", 5)
+local camEnd = intro:WaitForChild("CamEnd", 5)
+local updateCam = menuCams:FindFirstChild("UpdatelogCam")
+local creditsCam = menuCams:FindFirstChild("CreditsCam")
+local badgesCam = menuCams:FindFirstChild("BadgesCam")
+
+camera.CameraType = Enum.CameraType.Scriptable
+camera.CFrame = camStart.CFrame
+
+-------------------------------------------------
+-- INTRO CAMERA TWEEN
+-------------------------------------------------
+
+task.wait(3)
+
+TweenService:Create(camera,
+	TweenInfo.new(4,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),
+	{CFrame = camEnd.CFrame}
+):Play()
+
+-------------------------------------------------
+-- SHOW MAIN MENU
+-------------------------------------------------
+
+task.delay(4,function()
+	frame.Visible = true
+	titleLabel.Visible = true
+	lobbyButton.Visible = true
+	updateButton.Visible = true
+	creditsButton.Visible = true
+	badgesButton.Visible = true
+	closeButton.Visible = true
+end)
+
+-------------------------------------------------
+-- BUTTON ACTIONS
+-------------------------------------------------
+
+updateButton.MouseButton1Click:Connect(function()
+	if updateCam then
+		camera.CFrame = updateCam.CFrame
+		updateScrollFrame.Visible = true
+	end
+end)
+
+creditsButton.MouseButton1Click:Connect(function()
+	if creditsCam then
+		camera.CFrame = creditsCam.CFrame
+		creditsLabel.Visible = true
+	end
+end)
+
+badgesButton.MouseButton1Click:Connect(function()
+	if badgesCam then
+		camera.CFrame = badgesCam.CFrame
+		badgesScrollFrame.Visible = true
+	end
+end)
+
+-------------------------------------------------
+-- GO TO LOBBY BUTTON
+-------------------------------------------------
+
+lobbyButton.MouseButton1Click:Connect(function()
+	gui.Enabled = false
+	camera.CameraType = Enum.CameraType.Custom
+end)
+
+
+For Rodevs
